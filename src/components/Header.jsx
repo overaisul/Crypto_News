@@ -9,14 +9,17 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { CryptoContext } from "../CryptoContext";
 const Title = styled("div")(() => ({
   flex: 1,
   color: "gold",
   fontWeight: "bolder",
   cursor: "pointer",
 }));
-const Header = () => {
+function Header() {
+  const { currency, setCurrency } = useContext(CryptoContext);
   const navigator = useNavigate();
 
   const darkTheme = createTheme({
@@ -42,7 +45,11 @@ const Header = () => {
               </Typography>
             </Title>
             <Select
+              value={currency}
               variant="outlined"
+              onChange={(e) => {
+                setCurrency(e.target.value);
+              }}
               style={{
                 width: 100,
                 height: 40,
@@ -51,14 +58,14 @@ const Header = () => {
                 backgroundColor: "white",
               }}
             >
-              <MenuItem value={"USD"}>USD</MenuItem>
-              <MenuItem value={"TAKA"}>TAKA</MenuItem>
+              <MenuItem value={"usd"}>USD</MenuItem>
+              <MenuItem value={"bdt"}>BDT</MenuItem>
             </Select>
           </Toolbar>
         </Container>
       </AppBar>
     </ThemeProvider>
   );
-};
+}
 
 export default Header;
