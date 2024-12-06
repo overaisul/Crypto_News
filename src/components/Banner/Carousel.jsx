@@ -28,8 +28,9 @@ function Carousel() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      console.log(data);
-      setTrending(data);
+      const limitedData = data.slice(0, 20);
+      console.log(limitedData);
+      setTrending(limitedData);
     } catch (error) {
       console.log("Failed to fetch currency data:", error);
     }
@@ -38,6 +39,7 @@ function Carousel() {
   useEffect(() => {
     fetchCurrency();
   }, [currency]);
+
   const Carousel = styled("div")(() => ({
     height: "50%",
     display: "flex",

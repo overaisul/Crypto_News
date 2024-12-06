@@ -23,7 +23,12 @@ function App() {
 
   return (
     <CryptoContext.Provider
-      value={{ currency, setCurrency, symbol, setSymbol }}
+      value={{
+        currency,
+        setCurrency,
+        symbol,
+        setSymbol,
+      }}
     >
       <AppContainer>
         <Header />
