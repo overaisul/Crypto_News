@@ -70,9 +70,9 @@ function Carousel() {
             />
           </div>
           <h3>{coin?.symbol}</h3>
-          <span style={{ color: "red" }}>
+          <span style={{ color: profit ? "green" : "red" }}>
             {profit && "+"}
-            {coin?.price_change_percentage_24h?.toFixed(2)}
+            {coin?.price_change_percentage_24h?.toFixed(2)}%
           </span>
           <div>
             <h3>
