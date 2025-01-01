@@ -1,5 +1,6 @@
 import {
   Container,
+  Pagination,
   Table,
   TableBody,
   TableCell,
@@ -17,6 +18,7 @@ function Cointables() {
   const [coins, setCoins] = useState([]);
   const { currency, symbol } = useContext(CryptoContext);
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
   const navigate = useNavigate();
   const options = {
     method: "GET",
@@ -45,6 +47,10 @@ function Cointables() {
   useEffect(() => {
     fetchCurrency();
   }, [currency]);
+
+  const formatNumber = (number) => {
+    return number?.toLocaleString("en-US");
+  };
 
   const handleSearch = () => {
     return coins.filter(
@@ -105,81 +111,101 @@ function Cointables() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {handleSearch().map((row) => {
-                const profit = row.price_change_percentage_24h > 0;
+              {handleSearch()
+                .slice((page - 1) * 10, (page - 1) * 10 + 10)
+                .map((row) => {
+                  const profit = row.price_change_percentage_24h > 0;
 
-                return (
-                  <TableRow
-                    onClick={() => navigate(`/coins/${row.id}`)}
-                    key={row.id}
-                    style={{
-                      cursor: "pointer",
-                      "&:hover": {
-                        backgroundColor: "#131111",
-                      },
-                    }}
-                  >
-                    <TableCell
-                      component="th"
-                      scope="row"
+                  return (
+                    <TableRow
+                      onClick={() => navigate(`/coins/${row.id}`)}
+                      key={row.id}
                       style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        gap: 15,
+                        cursor: "pointer",
+                        "&:hover": {
+                          backgroundColor: "#131111",
+                        },
                       }}
                     >
-                      <div
+                      <TableCell
+                        component="th"
+                        scope="row"
                         style={{
                           display: "flex",
-                          flexDirection: "column",
                           justifyContent: "center",
                           alignItems: "center",
+                          gap: 15,
                         }}
                       >
-                        <img
-                          src={row?.image}
-                          alt={row.name}
-                          height="50"
-                          style={{ marginBottom: 10 }}
-                        />
-                        <span style={{ fontWeight: 500, color: "white" }}>
-                          {row?.name}
-                        </span>
-                        <br />
-                        <span
+                        <div
                           style={{
-                            textTransform: "uppercase",
-                            color: "white",
-                            fontSize: 12,
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
+                            alignItems: "center",
                           }}
                         >
-                          {row?.symbol}
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell style={{ textAlign: "center", color: "white" }}>
-                      {symbol} {row.current_price}
-                    </TableCell>
-                    <TableCell
-                      style={{
-                        color: profit ? "green" : "red",
-                        fontWeight: 500,
-                        textAlign: "center",
-                      }}
-                    >
-                      {profit && "+"}
-                      {row.price_change_percentage_24h?.toFixed(2)}%
-                    </TableCell>
-                    <TableCell style={{ textAlign: "center", color: "white" }}>
-                      {symbol} {row.market_cap}
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+                          <img
+                            src={row?.image}
+                            alt={row.name}
+                            height="50"
+                            style={{ marginBottom: 10 }}
+                          />
+                          <span style={{ fontWeight: 500, color: "white" }}>
+                            {row?.name}
+                          </span>
+                          <br />
+                          <span
+                            style={{
+                              textTransform: "uppercase",
+                              color: "white",
+                              fontSize: 12,
+                            }}
+                          >
+                            {row?.symbol}
+                          </span>
+                        </div>
+                      </TableCell>
+                      <TableCell
+                        style={{ textAlign: "center", color: "white" }}
+                      >
+                        {symbol} {formatNumber(row.current_price)}
+                      </TableCell>
+                      <TableCell
+                        style={{
+                          color: profit ? "green" : "red",
+                          fontWeight: 500,
+                          textAlign: "center",
+                        }}
+                      >
+                        {profit && "+"}
+                        {row.price_change_percentage_24h?.toFixed(2)}%
+                      </TableCell>
+                      <TableCell
+                        style={{ textAlign: "center", color: "white" }}
+                      >
+                        {symbol} {formatNumber(row.market_cap)}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
             </TableBody>
           </Table>
         </TableContainer>
+        <Pagination
+          style={{
+            backgroundColor: "#EEBC1D",
+            padding: 15,
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+          }}
+          count={(handleSearch()?.length / 10).toFixed()}
+          onChange={(e, value) => {
+            setPage(value);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+        />
       </Container>
     </>
   );

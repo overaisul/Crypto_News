@@ -56,7 +56,7 @@ function Carousel() {
     let profit = coin.price_change_percentage_24h >= 0;
     return (
       <Link
-        to={`/coin/${coin.id}`}
+        to={`/coins/${coin.id}`}
         key={index}
         style={{ alignItems: "center" }}
       >
